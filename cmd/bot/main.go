@@ -30,15 +30,32 @@ func main() {
 		if update.Message != nil { // If we got a message
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			if update.Message.Command() == "help" {
-				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "HELP command manual")
-				bot.Send(msg)
-				continue
+			switch update.Message.Command() {
+			case "help":
+				helpCommand(bot, update.Message)
+			default:
+				defaultBegavior(bot, update.Message)
 			}
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "You sent: "+update.Message.Text)
+			// if update.Message.Command() == "help" {
+			// 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "HELP command manual")
+			// 	bot.Send(msg)
+			// 	continue
+			// }
 
-			bot.Send(msg)
+			// msg := tgbotapi.NewMessage(update.Message.Chat.ID, "You sent: "+update.Message.Text)
+
+			// bot.Send(msg)
 		}
 	}
+}
+
+func helpCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "HELP command manual")
+	bot.Send(msg)
+}
+
+func defaultBegavior(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "You sent: "+inputMessage.Text)
+	bot.Send(msg)
 }
