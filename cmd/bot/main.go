@@ -36,17 +36,7 @@ func main() {
 	for update := range updates {
 		if update.Message != nil { // If we got a message
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-			switch update.Message.Command() {
-			case "help":
-				commander.Help(update.Message)
-			case "list":
-				commander.List(update.Message, productService)
-			case "get":
-				commander.Get(update.Message)
-			default:
-				commander.Default(update.Message)
-			}
+			commander.HandleUpdate(update)
 		}
 	}
 }
